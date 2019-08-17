@@ -5,15 +5,14 @@ plugins {
 
 allprojects {
     sourceCompatibility = '1.8'
+    repositories {
+        mavenCentral()
+    }
 }
 
 version = '1.0-DEV'
 applicationName = 'HarearsWarriors'
 mainClassName = 'com.fireowls.harearswarriors.launcher.HWLauncher'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compile project(':DesktopLauncher')
@@ -46,6 +45,7 @@ subprojects {
         finalizedBy ":$task.project.name:deployReport"
         finalizedBy ":$task.project.name:deployDoc"
     }
+
 }
 
 task cleanPages {

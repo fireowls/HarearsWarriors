@@ -2,8 +2,6 @@ plugins {
     id 'java'
 }
 
-version = '0.1-DEV'
-
 sourceSets {
     main {
         java {
@@ -17,14 +15,7 @@ sourceSets {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    compile project(':HarearsWarriorsApi')
     testCompile 'junit:junit:4.12'
 }
-
-
 
