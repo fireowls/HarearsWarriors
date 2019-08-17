@@ -1,0 +1,117 @@
+plugins {
+    id 'application'
+}
+
+
+allprojects {
+    sourceCompatibility = '1.8'
+}
+
+version = '1.0-DEV'
+applicationName = 'HarearsWarriors'
+mainClassName = 'com.fireowls.harearswarriors.launcher.HWLauncher'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':DesktopLauncher')
+    testCompile 'junit:junit:4.12'
+}
+
+
+subprojects {
+
+    task deployReport(type: Copy) { task ->
+        dependsOn ":$task.project.name:test"
+        group 'pages'
+        description 'deploy the report of tests'
+
+        from "${file("build/reports/tests/").path}"
+        into "../pages/tests/$task.project.name"
+    }
+
+    task deployDoc(type: Copy) { task ->
+        dependsOn ":$task.project.name:javadoc"
+        group 'pages'
+        description 'deploy the javadoc'
+        from "${file('build/docs/javadoc/').path}"
+        into "../pages/docs/$task.project.name"
+    }
+
+    task deploy { task ->
+        description 'deploy report and javadoc'
+        group 'pages'
+        finalizedBy ":$task.project.name:deployReport"
+        finalizedBy ":$task.project.name:deployDoc"
+    }
+}
+
+task cleanPages {
+    group 'pages'
+    description 'clean pages'
+    file('pages').deleteDir()
+}
+
+task deployPages {
+    group 'pages'
+    description 'deploy for gh-pages'
+    dependsOn cleanPages
+    subprojects.forEach { task ->
+        finalizedBy ":$task.project.name:deploy"
+    }
+}
+
+task generatePages {
+    group 'pages'
+    description 'generate the main page of gh-pages'
+    doLast {
+        println 'build index...'
+        file('pages').mkdir()
+
+        File index = new File('pages/index.html')
+        index.createNewFile()
+
+
+        index.text = ('<!DOCTYPE html>\n' +
+                '<html>\n' +
+                '   <head>\n' +
+                '       <meta charset="utf-8" />\n' +
+                '       <title>HarearsWarriors - Project panel</title>\n' +
+                '   </head>\n' +
+                '   <body>\n' +
+                '       <h1>Panel</h1>\n' +
+                '       <h2>Documentation</h2>\n' +
+                '       <ul>\n')
+        subprojects.forEach { project ->
+            index.text += (
+                        '           <li>\n' +
+                        "               <a href=\"docs/$project.name/index.html\">$project.name</a>\n" +
+                        '           </li>\n')
+        }
+        index.text += """       </ul>
+        <h2>Test report</h2>
+        <ul>
+"""
+        subprojects.forEach { project ->
+
+            index.text += """           <li>
+                <a href="tests/$project.name/test/index.html">$project.name</a>
+            </li>
+"""
+
+        }
+        index.text += """       </ul>\n"""
+
+        index.text += (
+                '   </body>\n' +
+                '</html>\n')
+
+
+    }
+    finalizedBy deployPages
+}
+
+clean.finalizedBy cleanPages
+

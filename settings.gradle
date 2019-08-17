@@ -1,0 +1,3 @@
+rootProject.name = 'HarearsWarriors'
+
+include 'DesktopLauncher'

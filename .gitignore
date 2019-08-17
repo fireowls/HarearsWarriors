@@ -1,0 +1,10 @@
+.gradle
+
+#IDE
+.idea
+.eclipse
+*.iml
+
+#Build
+**/build
+pages
