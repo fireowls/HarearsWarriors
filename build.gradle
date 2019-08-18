@@ -59,7 +59,8 @@ task deployPages {
     description 'deploy for gh-pages'
     dependsOn cleanPages
     subprojects.forEach { task ->
-        finalizedBy ":$task.project.name:deploy"
+        if (task.project.name != 'PanelPages')
+            finalizedBy ":$task.project.name:deploy"
     }
 }
 
@@ -67,49 +68,27 @@ task generatePages {
     group 'pages'
     description 'generate the main page of gh-pages'
     doLast {
-        println 'build index...'
+
+        def index = new File('PanelPages/src/index.html').text
+
+        def docs = ''
+        def tests = ''
+        subprojects.forEach { project ->
+            if (project.name != 'PanelPages') {
+                docs += "<li><a href=\"docs/$project.name/index.html\">$project.name</a></li>"
+                tests += "<li><a href=\"tests/$project.name/test/index.html\">$project.name</a></li>"
+            }
+        }
+        index = index.replace('__documentationlist__', docs)
+        index = index.replace('__testsreportslist__', tests)
+
+        File indexFile = new File('pages/index.html')
         file('pages').mkdir()
-
-        File index = new File('pages/index.html')
-        index.createNewFile()
-
-
-        index.text = ('<!DOCTYPE html>\n' +
-                '<html>\n' +
-                '   <head>\n' +
-                '       <meta charset="utf-8" />\n' +
-                '       <title>HarearsWarriors - Project panel</title>\n' +
-                '   </head>\n' +
-                '   <body>\n' +
-                '       <h1>Panel</h1>\n' +
-                '       <h2>Documentation</h2>\n' +
-                '       <ul>\n')
-        subprojects.forEach { project ->
-            index.text += (
-                        '           <li>\n' +
-                        "               <a href=\"docs/$project.name/index.html\">$project.name</a>\n" +
-                        '           </li>\n')
-        }
-        index.text += """       </ul>
-        <h2>Test report</h2>
-        <ul>
-"""
-        subprojects.forEach { project ->
-
-            index.text += """           <li>
-                <a href="tests/$project.name/test/index.html">$project.name</a>
-            </li>
-"""
-
-        }
-        index.text += """       </ul>\n"""
-
-        index.text += (
-                '   </body>\n' +
-                '</html>\n')
-
+        indexFile.createNewFile()
+        indexFile.text = index
 
     }
+    finalizedBy ':PanelPages:copySources'
     finalizedBy deployPages
 }
 
