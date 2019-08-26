@@ -12,7 +12,7 @@ allprojects {
 
 version = '1.0-DEV'
 applicationName = 'HarearsWarriors'
-mainClassName = 'com.fireowls.harearswarriors.launcher.HWLauncher'
+mainClassName = 'com.fireowls.harearswarriors.plugin.HWLauncher'
 
 dependencies {
     compile project(':DesktopLauncher')
@@ -20,7 +20,7 @@ dependencies {
 }
 
 
-subprojects {
+subprojects { project ->
 
     task deployReport(type: Copy) { task ->
         dependsOn ":$task.project.name:test"
@@ -46,18 +46,36 @@ subprojects {
         finalizedBy ":$task.project.name:deployDoc"
     }
 
+    task clearAssets(type: Delete) {
+        description 'clear assets file'
+        group 'assets'
+        delete "$buildDir/assets"
+    }
+
+    task copyTestAssets(type: Copy) {
+        description 'deploy assets for test'
+        group 'assets'
+        from '../assets/test'
+        into "assets"
+        dependsOn clearAssets
+    }
+
+    task cleanPages {
+        group 'pages'
+        description 'clean pages'
+        file('pages').deleteDir()
+    }
+
+    clean.finalizedBy cleanPages
+    test.dependsOn copyTestAssets
+
 }
 
-task cleanPages {
-    group 'pages'
-    description 'clean pages'
-    file('pages').deleteDir()
-}
 
 task deployPages {
     group 'pages'
     description 'deploy for gh-pages'
-    dependsOn cleanPages
+    dependsOn clean
     subprojects.forEach { task ->
         if (task.project.name != 'PanelPages')
             finalizedBy ":$task.project.name:deploy"
@@ -91,6 +109,3 @@ task generatePages {
     finalizedBy ':PanelPages:copySources'
     finalizedBy deployPages
 }
-
-clean.finalizedBy cleanPages
-

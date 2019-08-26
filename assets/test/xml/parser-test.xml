@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <elem>
+        <sub-elem>I'm a sub Elem</sub-elem>
+        <sub-elem-2>I'm a second sub Elem</sub-elem-2>
+    </elem>
+    <elem>
+        <sub-elem>I'm a other sub Elem</sub-elem>
+    </elem>
+</root>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<plugin>
+    <name>Test HarearsWarriors</name>
+    <version>1.0</version>
+    <main>com.fireowls.harearswarriors.HarearsWarriors</main>
+    <authors>
+        <author>fireowls team</author>
+    </authors>
+</plugin>
