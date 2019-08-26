@@ -6,7 +6,6 @@ import com.fireowls.harearswarriors.gameapi.utils.xml.XMLParser;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.xml.bind.annotation.XmlAccessOrder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

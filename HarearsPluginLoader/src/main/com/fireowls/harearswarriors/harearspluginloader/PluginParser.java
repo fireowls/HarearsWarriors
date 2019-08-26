@@ -6,7 +6,6 @@ import com.fireowls.harearswarriors.gameapi.utils.xml.XMLDocument;
 import com.fireowls.harearswarriors.gameapi.utils.xml.XMLParser;
 import com.fireowls.harearswarriors.harearspluginloader.exceptions.JarNotDefineException;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;

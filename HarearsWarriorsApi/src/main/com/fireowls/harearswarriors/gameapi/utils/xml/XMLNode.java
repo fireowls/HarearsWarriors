@@ -42,14 +42,14 @@ public class XMLNode {
     }
 
     /**
-     * This function is use by the <code>XMLDocument</code> class.<br/>
+     * This function is use by the <code>XMLDocument</code> class.<br>
      * <strong>Please use the <code>getNodesByPath(String)</code> function !</strong>
-     * <hr/>
+     * <hr>
      * The function add this XMLNode in the list passed in parameters if the path passed
-     * in parameters match with the path of this node.<br/>
+     * in parameters match with the path of this node.<br>
      * And finally, the function call the same function for all childes of the node.
-     * @param listNode
-     * @param path
+     * @param listNode the list to complete
+     * @param path The path of wanted nodes
      */
     public void addChildesByPathInList(List<XMLNode> listNode, String path) {
         if (path.equals(this.path)) {
