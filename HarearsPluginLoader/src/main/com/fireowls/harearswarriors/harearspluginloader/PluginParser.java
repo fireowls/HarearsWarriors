@@ -4,6 +4,7 @@ import com.fireowls.harearswarriors.gameapi.plugin.HWPlugin;
 import com.fireowls.harearswarriors.gameapi.utils.xml.PathNotCorrectException;
 import com.fireowls.harearswarriors.gameapi.utils.xml.XMLDocument;
 import com.fireowls.harearswarriors.gameapi.utils.xml.XMLParser;
+import com.fireowls.harearswarriors.harearspluginloader.exceptions.HWPLFileNotCorrectException;
 import com.fireowls.harearswarriors.harearspluginloader.exceptions.JarNotDefineException;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class PluginParser {
      * @return The jar parsed to plugin
      * @exception JarNotDefineException
      */
-    public HWPlugin parse() throws JarNotDefineException, IOException {
+    public HWPlugin parse() throws JarNotDefineException, IOException, HWPLFileNotCorrectException {
         if (jar != null)
             return parse(jar);
         throw new JarNotDefineException(this);
@@ -54,7 +55,7 @@ public class PluginParser {
      * @param jar The jar to parse
      * @return The jar parsed to plugin
      */
-    public HWPlugin parse(JarFile jar) throws IOException {
+    public HWPlugin parse(JarFile jar) throws IOException, HWPLFileNotCorrectException {
         JarEntry entry = jar.getJarEntry("hwpl.xml");
         String hwplContent = readInputStream(jar.getInputStream(entry));
 
@@ -69,6 +70,7 @@ public class PluginParser {
 
         } catch (PathNotCorrectException e) {
             e.printStackTrace();
+            throw new HWPLFileNotCorrectException(jar.getName());
         }
 
         return null;

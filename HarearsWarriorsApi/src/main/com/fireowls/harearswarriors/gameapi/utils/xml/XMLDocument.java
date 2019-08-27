@@ -55,4 +55,18 @@ public class XMLDocument {
         return root;
     }
 
+    /**
+     * Get the xml code of the document
+     * @return the xml code of the document
+     */
+    @Override
+    public String toString() {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"+root.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof XMLDocument && root.equals(obj);
+    }
+
 }
