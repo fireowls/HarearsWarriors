@@ -9,3 +9,6 @@
 **/build
 pages
 */assets
+
+#tests
+*/.xmlparser/

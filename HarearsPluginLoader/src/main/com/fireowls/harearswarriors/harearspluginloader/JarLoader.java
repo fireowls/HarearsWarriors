@@ -2,46 +2,50 @@ package com.fireowls.harearswarriors.harearspluginloader;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarFile;
 
 /**
  * HWPLLoader load all jar in a file
  */
-public class HWPLLoader {
+public class JarLoader {
 
-    private List<JarFile> jars;
+    private HashMap jars;
     private File file;
 
     /**
      * Create a new HWPLLoader
      * @param file file contains all jar
      */
-    public HWPLLoader(File file) {
-        if (file.isDirectory())
-            this.file = file;
-        else
-            this.file = file.getParentFile();
-        jars = new ArrayList<>();
+    public JarLoader(File file) {
+        this.file = (file.isDirectory()) ? file : file.getParentFile();
+        jars = new HashMap<JarFile, File>();
     }
 
     /**
      * Load all plugins
+     * @return jars list
      */
-    public void loadPlugins() {
+    public Map<JarFile, File> loadPluginJars() {
         for (File child : file.listFiles()) {
             if (child.getName().endsWith(".jar")) {
                 try {
                     JarFile jar = new JarFile(child);
                     if (jarIsPlugin(jar)) {
-                        jars.add(jar);
+                        jars.put(jar, child);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
+        return jars;
     }
 
     private boolean jarIsPlugin(JarFile jar) {
@@ -60,7 +64,7 @@ public class HWPLLoader {
      * Get the plugins find in the folder
      * @return plugins list
      */
-    public List<JarFile> getPlugins() {
+    public HashMap<JarFile, File> getPlugins() {
         return jars;
     }
 

@@ -1,5 +1,5 @@
  # HarearsWarriorsApi
- 
+ This is the main API for all this game
  ## who use this
  This module is import inside:
  * ```DesktopLauncher```

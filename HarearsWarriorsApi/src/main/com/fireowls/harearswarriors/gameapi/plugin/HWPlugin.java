@@ -1,5 +1,9 @@
 package com.fireowls.harearswarriors.gameapi.plugin;
 
+import com.fireowls.harearswarriors.gameapi.GameApi;
+
+import java.util.List;
+
 /**
  * The plugin plugin class is the main class for a plugin.
  */
@@ -14,17 +18,23 @@ public abstract class HWPlugin {
      */
     protected String version;
     /**
-     * define the group
+     * define the groups
      */
-    protected String group;
+    protected List<String> groups;
 
     /**
-     * methode call when the plugin is stated.
+     * function call when the plugin is loaded
+     * @param gameApi The instance of gameApi loaded by the launcher
+     */
+    public abstract void onLoad(GameApi gameApi);
+
+    /**
+     * function call when the plugin is stated.
      */
     public abstract void onStart();
 
     /**
-     * methode call when the plugin si stoped
+     * function call when the plugin si stoped
      */
     public abstract void onStop();
 
@@ -46,10 +56,10 @@ public abstract class HWPlugin {
 
     /**
      * Set group
-     * @param group Group of the plugin
+     * @param groups Group of the plugin
      */
-    public void setGroup(String group) {
-        this.group = group;
+    public void setGroup(List<String> groups) {
+        this.groups = groups;
     }
 
     /**
@@ -69,8 +79,8 @@ public abstract class HWPlugin {
     /**
      * @return plugin group
      */
-    public String getGroup() {
-        return group;
+    public List<String> getGroups() {
+        return groups;
     }
 
 }
