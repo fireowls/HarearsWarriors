@@ -1,9 +1,0 @@
-version = '1.0-BETA'
-
-task copySources(type: Copy) {
-    group 'pages'
-    from ('src/') {
-        exclude 'index.html'
-    }
-    into '../pages'
-}

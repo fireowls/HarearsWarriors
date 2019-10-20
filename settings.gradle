@@ -1,5 +1,1 @@
-rootProject.name = 'HarearsWarriors'
-
-include 'DesktopLauncher', 'HarearsWarriorsApi',
-        'Server', 'HarearsWarriors', 'HarearsPluginLoader',
-        'PanelPages'
+include 'desktop', 'android', 'core', 'plugin-loader', 'api', 'server'

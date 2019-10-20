@@ -1,111 +1,78 @@
-plugins {
-    id 'application'
-}
+buildscript {
+    
 
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.4.1'
+        
+
+    }
+}
 
 allprojects {
-    sourceCompatibility = '1.8'
+
+    version = '1.0'
+    ext {
+        appName = "HarearsWarriors"
+        gdxVersion = '1.9.10'
+        roboVMVersion = '2.3.7'
+        box2DLightsVersion = '1.4'
+        ashleyVersion = '1.7.0'
+        aiVersion = '1.8.0'
+    }
+
     repositories {
+        mavenLocal()
         mavenCentral()
+        jcenter()
+        google()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
 }
 
-version = '1.0-DEV'
-applicationName = 'HarearsWarriors'
-mainClassName = 'com.fireowls.harearswarriors.plugin.HWLauncher'
-
-dependencies {
-    compile project(':DesktopLauncher')
-    testCompile 'junit:junit:4.12'
-}
+project(":desktop") {
+    apply plugin: "java-library"
 
 
-subprojects { project ->
-
-    task deployReport(type: Copy) { task ->
-        dependsOn ":$task.project.name:test"
-        group 'pages'
-        description 'deploy the report of tests'
-
-        from "${file("build/reports/tests/").path}"
-        into "../pages/tests/$task.project.name"
-    }
-
-    task deployDoc(type: Copy) { task ->
-        dependsOn ":$task.project.name:javadoc"
-        group 'pages'
-        description 'deploy the javadoc'
-        from "${file('build/docs/javadoc/').path}"
-        into "../pages/docs/$task.project.name"
-    }
-
-    task deploy { task ->
-        description 'deploy report and javadoc'
-        group 'pages'
-        finalizedBy ":$task.project.name:deployReport"
-        finalizedBy ":$task.project.name:deployDoc"
-    }
-
-    task clearAssets(type: Delete) {
-        description 'clear assets file'
-        group 'assets'
-        delete "$buildDir/assets"
-    }
-
-    task copyTestAssets(type: Copy) {
-        description 'deploy assets for test'
-        group 'assets'
-        from '../assets/test'
-        into "assets"
-        dependsOn clearAssets
-    }
-
-    task cleanPages {
-        group 'pages'
-        description 'clean pages'
-        file('pages').deleteDir()
-    }
-
-    clean.finalizedBy cleanPages
-    test.dependsOn copyTestAssets
-
-}
-
-
-task deployPages {
-    group 'pages'
-    description 'deploy for gh-pages'
-    dependsOn clean
-    subprojects.forEach { task ->
-        if (task.project.name != 'PanelPages')
-            finalizedBy ":$task.project.name:deploy"
+    dependencies {
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        
     }
 }
 
-task generatePages {
-    group 'pages'
-    description 'generate the main page of gh-pages'
-    doLast {
+project(":android") {
+    apply plugin: "android"
 
-        def index = new File('PanelPages/src/index.html').text
+    configurations { natives }
 
-        def docs = ''
-        def tests = ''
-        subprojects.forEach { project ->
-            if (project.name != 'PanelPages') {
-                docs += "<li><a href=\"docs/$project.name/index.html\">$project.name</a></li>"
-                tests += "<li><a href=\"tests/$project.name/test/index.html\">$project.name</a></li>"
-            }
-        }
-        index = index.replace('__documentationlist__', docs)
-        index = index.replace('__testsreportslist__', tests)
-
-        File indexFile = new File('pages/index.html')
-        file('pages').mkdir()
-        indexFile.createNewFile()
-        indexFile.text = index
-
+    dependencies {
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+        
     }
-    finalizedBy ':PanelPages:copySources'
-    finalizedBy deployPages
+}
+
+project(":core") {
+    apply plugin: "java-library"
+
+
+    dependencies {
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        
+    }
 }
