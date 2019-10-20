@@ -1,7 +1,7 @@
 package com.fireowls.harearswarriors.testgameapi.utils.xml;
 
-import com.fireowls.harearswarriors.gameapi.utils.xml.XMLDocument;
-import com.fireowls.harearswarriors.gameapi.utils.xml.XMLParser;
+import com.fireowls.harearswarriors.harearsapi.utils.xml.XMLDocument;
+import com.fireowls.harearswarriors.harearsapi.utils.xml.XMLParser;
 import org.junit.Before;
 import org.junit.Test;
 

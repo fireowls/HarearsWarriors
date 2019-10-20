@@ -1,21 +1,33 @@
 plugins {
-    id 'java'
+    id 'application'
 }
 
+applicationName = "HarearsWarriorsServer"
+version = "ALPHA-0.1"
+
+mainClassName = "fr.fireowls.harearswarriors.server.HarearsWarriorsServer"
+
 sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main']
-        }
-    }
-    test {
-        java {
-            srcDirs = ['src/test']
-        }
-    }
+    main.java.srcDirs = ['src/main']
+    test.java.srcDirs = ['src/test']
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
+    compile project(":api")
+    compile project(":plugin-loader")
 }
 
+task unzipProd(type: Copy) {
+    dependsOn build
+    from zipTree("$buildDir/distributions/$applicationName-${version}.zip")
+    into file("$buildDir/archive")
+}
+
+task deployDevServer(type: Copy) {
+    dependsOn unzipProd
+    from file("$buildDir/archive/$applicationName-${version}/")
+    into "$projectDir/../$serverFileName/"
+    doLast {
+        file("$buildDir/archive/").deleteDir()
+    }
+}

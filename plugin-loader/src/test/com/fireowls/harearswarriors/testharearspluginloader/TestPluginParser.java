@@ -1,7 +1,7 @@
 package com.fireowls.harearswarriors.testharearspluginloader;
 
-import com.fireowls.harearswarriors.gameapi.GameApi;
-import com.fireowls.harearswarriors.gameapi.plugin.HWPlugin;
+import com.fireowls.harearswarriors.harearsapi.GameApi;
+import com.fireowls.harearswarriors.harearsapi.plugin.HWPlugin;
 import com.fireowls.harearswarriors.harearspluginloader.HarearsPluginLoader;
 import com.fireowls.harearswarriors.harearspluginloader.PluginParser;
 import com.fireowls.harearswarriors.harearspluginloader.exceptions.HWPLFileNotCorrectException;
