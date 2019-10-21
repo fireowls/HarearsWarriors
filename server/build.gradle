@@ -17,14 +17,27 @@ dependencies {
     compile project(":plugin-loader")
 }
 
+task permissionScript(type: Exec) {
+    commandLine 'chmod', '700', "$buildDir/archive/$applicationName-${version}/run.sh"
+}
+
+applicationDistribution.from("$projectDir/scripts/") {
+    into "./"
+}
+
 task unzipProd(type: Copy) {
     dependsOn build
     from zipTree("$buildDir/distributions/$applicationName-${version}.zip")
     into file("$buildDir/archive")
+
+    if (!System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows'))
+        finalizedBy permissionScript
+
 }
 
 task deployDevServer(type: Copy) {
     dependsOn unzipProd
+
     from file("$buildDir/archive/$applicationName-${version}/")
     into "$projectDir/../$serverFileName/"
     doLast {

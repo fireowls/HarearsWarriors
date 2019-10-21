@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<plugin>
+    <name>basic-plugin</name>
+    <version>1.0</version>
+    <main>fr.fireowls.harearswarriors.basicplugin.BasicPlugin</main>
+    <authors>
+        <author>Team Fireowls</author>
+    </authors>
+</plugin>

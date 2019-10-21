@@ -93,4 +93,18 @@ task deployDevServer {
     group 'server'
     dependsOn clearServer
     dependsOn createServer
+    dependsOn ":basic-plugin:deployDevServer"
+}
+
+task runDevServer(type: Exec) {
+
+    group 'server'
+    dependsOn deployDevServer
+
+    workingDir "$serverFileName/"
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', 'run.bat'
+    } else {
+        commandLine 'sh', '-c', './run.sh'
+    }
 }

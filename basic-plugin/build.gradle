@@ -1,0 +1,23 @@
+apply plugin: 'java'
+
+sourceSets {
+    main.java.srcDirs = [ 'src/main' ]
+    test.java.srcDirs = [ 'src/test' ]
+}
+
+jar {
+    from('src/main') {
+        include '*.xml'
+    }
+}
+
+dependencies {
+    compile project(":api")
+    testCompile 'junit:junit:4.12'
+}
+
+task deployDevServer(type: Copy) {
+    dependsOn build
+    from "$buildDir/libs"
+    into "$projectDir/../$serverFileName/plugins/"
+}
